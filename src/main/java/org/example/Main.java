@@ -13,7 +13,7 @@ public class Main {
         String url = "jdbc:postgresql://localhost:5432/testdbforprograminjenery_lab1";
         String username = "noir";
         String pass = "Noir_Tea";
-
+        //=============================================================
         // используем строителя для БД
         Connection conn = DriverManager.getConnection(url, username, pass);
         Statement state = conn.createStatement();
@@ -30,7 +30,7 @@ public class Main {
                     .build();
             users.add(user);
         }
-
+        //=============================================================
         // используем строителя для Формы:
         /**
          * Сервер будет работать до получения первого запроса
@@ -45,12 +45,16 @@ public class Main {
 
         // Дожидаемся остановки сервера...
         SimpleHttpServer.MyHandler.latch.await();
-        System.out.println("сервер стопнулся");
+        // сервер стопнулся
 
 
         // билдим из того что получили из формы:
         User u2 = SimpleHttpServer.getBuilder().build();
         users.add(u2);
+
+        //=============================================================
+        // TODO: авторегистрация через VK-API
+        // <...>
 
         // смотрим накопленных пользователей из БД и формы:
         for (User user : users) {
