@@ -35,26 +35,31 @@ public class Main {
         /**
          * Сервер будет работать до получения первого запроса
          * и только потом продолжится выполнение программы
+         *
+         * Либо же происходит авторегистрация чччерез VK-API
+         * (при этом достается только имя профиля страницы ВК и не более!)
          */
-        SimpleHttpServer.MyHandler.latch = new CountDownLatch(1);
+//        SimpleHttpServer.MyHandler.latch = new CountDownLatch(1);
+        AnotherHttpServer.AnotherHandler.latch2 = new CountDownLatch(1);
         try {
-            SimpleHttpServer.start();
+            AnotherHttpServer.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Дожидаемся остановки сервера...
-        SimpleHttpServer.MyHandler.latch.await();
+//        SimpleHttpServer.MyHandler.latch.await();
+        AnotherHttpServer.AnotherHandler.latch2.await();
         // сервер стопнулся
 
 
         // билдим из того что получили из формы:
-        User u2 = SimpleHttpServer.getBuilder().build();
+        User u2 = AnotherHttpServer.getBuilder().build();
         users.add(u2);
 
         //=============================================================
-        // TODO: авторегистрация через VK-API
-        // <...>
+
+
 
         // смотрим накопленных пользователей из БД и формы:
         for (User user : users) {
@@ -62,9 +67,13 @@ public class Main {
             System.out.println("Почта: " + user.getEmail());
             if (user.getAge() == 0) {
                 System.out.println("Кажется этот пользователь был взят из БД и у него не указан возраст!");
+                if (user.getEmail() == "NONE"){
+                    System.out.println("А, нет. Кажется этот пользователь, зарегистрирован по ссылке и нам доступно только его имя!");
+                }
             } else {
                 System.out.println("Возраст: " + user.getAge());
             }
+            System.out.println("------------------------------");
         }
     }
 }
